@@ -1,0 +1,3 @@
+.container.svelte-4rv1gq{height:100vh;width:100vh;display:grid;grid-template-columns:repeat(6, 1fr);grid-template-rows:repeat(6, 1fr);gap:5px}
+canvas.svelte-15nsus0{z-index:101;position:fixed;top:0;left:0;width:100%;height:100%}
+.exit-note.svelte-1isoyh1{opacity:100%;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);display:flex;align-items:center;justify-content:center;width:80%;max-width:400px;padding:1rem;border:2px solid #ff0000;border-radius:0.25rem;background-color:rgba(255, 255, 255, 0.95);color:#0022a6;font-size:1.2rem;text-align:center;z-index:100;transition:opacity 0.3s ease-in-out}.exit-note.hidden.svelte-1isoyh1{opacity:0;pointer-events:none}
