@@ -1,38 +1,94 @@
-<script>
-  export let cardId;
+<script context="module">
+  export let playedOnce = false
 </script>
 
-<button class="my btn btn-secondary" on:click={() => console.log(`Card clicked: ${cardId}`)}>
-<!--  <span>{cardId}</span>-->
-  x
-<!--  <div class="my">x</div>-->
-</button>
+<script>
+  import {onMount} from "svelte";
+
+  export let cardId;
+  export let color
+  export let rsc;
+
+  let flipped = false;
+  let audio
+
+  onMount(()=>{
+    if (rsc.audio) {
+      audio = new Audio(rsc.audio);
+    }
+  })
+
+  function flipCard() {
+    flipped = !flipped;
+    console.log(`Flipped card ${cardId}: ${flipped}`);
+
+    if (audio && !playedOnce) {
+      if (flipped) {
+        playedOnce = true
+        console.log("play sound")
+        audio.play();
+      }
+    }
+  }
+</script>
+
+<div class="card" class:flipped={flipped} on:click={flipCard}>
+  <div class="card-face card-face-front {color}" >
+  </div>
+  <div class="card-face card-face-back">
+    <img src="{rsc.img}" alt="Card image" />
+  </div>
+</div>
 
 <style>
   .card {
+    background: black;
     width: 100%;
     height: 100%;
-    /*padding-bottom: 100%; !* Maintain aspect ratio *!*/
-    /*position: relative;*/
-    /*border: 1px solid #ccc;*/
-    background-color: black;
-    /*color: black;*/
-    /*overflow: hidden; !* Hide content that goes outside the card *!*/
+    perspective: 1000px;
+    cursor: pointer;
   }
 
-  .card span {
-    /*position: absolute;*/
-    /*top: 0;*/
-    /*left: 0;*/
-    /*width: 100%;*/
-    /*height: 100%;*/
-    align-self: stretch;
-    /*display: flex;*/
-    /*align-items: center;*/
-    /*justify-content: center;*/
+  .card-face {
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    position: absolute;
+    transition: transform 0.5s;
   }
 
-  my {
-    align-self: stretch;
+  .card-face-front {
+    display: flex;
+  }
+
+  .white {
+    background-color: white;
+  }
+
+  .red {
+    background-color: red;
+  }
+
+  .blue {
+    background-color: blue;
+  }
+
+  .card-face-back {
+    background-color: #fff;
+    transform: rotateY(180deg);
+  }
+
+  .card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .flipped .card-face-front {
+    transform: rotateY(180deg);
+  }
+
+  .flipped .card-face-back {
+    transform: rotateY(0);
   }
 </style>

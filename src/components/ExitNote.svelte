@@ -1,18 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
-
-    let isVisible = true;
-
-    // function handleKeyPress() {
-    //     isVisible = false;
-    // }
-
-    // <!--onMount(() => {-->
-    // <!--    window.addEventListener('keydown', handleKeyPress);-->
-    // <!--    return () => {-->
-    // <!--        window.removeEventListener('keydown', handleKeyPress);-->
-    // <!--    };-->
-    // });
+    export let text = "Site under construction 🏗️"
 </script>
 
 <style>
@@ -37,13 +24,9 @@
         z-index: 100;
         transition: opacity 0.3s ease-in-out;
     }
-
-    .exit-note.hidden {
-        opacity: 0;
-        pointer-events: none;
-    }
 </style>
 
-<div class="exit-note alert alert-success shadow-sm {isVisible ? '' : 'hidden'}" role="alert">
-    Site under construction 🏗️
+
+<div class="exit-note alert alert-success shadow-sm" role="alert">
+    {text}
 </div>
