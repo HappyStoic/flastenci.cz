@@ -4,7 +4,9 @@
 
 <script>
   import {onMount} from "svelte";
+  import { createEventDispatcher } from 'svelte';
 
+  const dispatch = createEventDispatcher();
   export let cardId;
   export let color
   export let rsc;
@@ -18,18 +20,31 @@
     }
   })
 
+  function dispatchShown(){
+    dispatch('shown', {
+      "rsc": rsc,
+      "hideCallback": ()=>{ flipped = false }
+    });
+  }
+
   function flipCard() {
-    flipped = !flipped;
+    if (flipped) {
+      return // flipped back only via callback from gameboard
+    }
+    flipped = true
     console.log(`Flipped card ${cardId}: ${flipped}`);
 
-    if (audio && !playedOnce) {
-      if (flipped) {
+    if (flipped) {
+      dispatchShown()
+
+      if (audio && !playedOnce) {
         playedOnce = true
         console.log("play sound")
         audio.play();
       }
     }
   }
+
 </script>
 
 <div class="card" class:flipped={flipped} on:click={flipCard}>

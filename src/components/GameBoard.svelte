@@ -6,6 +6,8 @@
   let gridSize = 6;
   let cards = []
   let availableResources;
+  let firstShown = null;
+  let hideAwaitingCards = null
 
   function color(idx) {
     return idx % 6 < 2 ? 'white' : idx % 6 < 4 ? 'red' : 'blue'
@@ -21,11 +23,44 @@
       const idx = Math.floor(Math.random() * availableResources.length);
       return availableResources.splice(idx, 1)[0]  // pop the element
   }
+
+  function cardShown(e){
+      let card = e.detail
+      // console.log(e)
+
+      if (firstShown == null) {
+          if (hideAwaitingCards) {
+              hideAwaitingCards()
+              hideAwaitingCards = null
+          }
+
+          firstShown = card
+          return
+      }
+
+      if (firstShown.rsc == card.rsc) {
+          console.log("clicked the same!")
+          firstShown = null
+
+      } else {
+          let id1 = setTimeout(card.hideCallback, 5000)
+          let id2 = setTimeout(firstShown.hideCallback, 5000)
+          let callback1 = card.hideCallback
+          let callback2 = firstShown.hideCallback
+          hideAwaitingCards = () => {
+              clearTimeout(id1)
+              clearTimeout(id2)
+              callback1()
+              callback2()
+          }
+          firstShown = null
+      }
+  }
 </script>
 
 <div class="container">
   {#each cards as card (card)}
-      <Card color="{color(card)}" cardId="{card}" rsc="{popRandomRsc()}" />
+      <Card on:shown={cardShown} color="{color(card)}" cardId="{card}" rsc="{popRandomRsc()}" />
   {/each}
 </div>
 
