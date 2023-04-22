@@ -1,7 +1,7 @@
 <script>
   import Card from "./Card.svelte";
   import { resources } from "../stores.js";
-  import {onMount} from "svelte";
+  import { onMount } from "svelte";
 
   let gridSize = 6;
   let cards = []
@@ -39,7 +39,9 @@
       }
 
       if (firstShown.rsc == card.rsc) {
-          console.log("clicked the same!")
+          card.cardFinishedCallback()
+          firstShown.cardFinishedCallback()
+          firstShown.playIfPossibleCallback()
           firstShown = null
 
       } else {

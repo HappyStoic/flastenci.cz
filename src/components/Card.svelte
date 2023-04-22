@@ -1,7 +1,3 @@
-<script context="module">
-  export let playedOnce = false
-</script>
-
 <script>
   import {onMount} from "svelte";
   import { createEventDispatcher } from 'svelte';
@@ -12,6 +8,7 @@
   export let rsc;
 
   let flipped = false;
+  let finished = false;
   let audio
 
   onMount(()=>{
@@ -20,34 +17,38 @@
     }
   })
 
+  function playIfPossible(){
+    if (audio){
+      audio.play();
+    }
+  }
+
   function dispatchShown(){
     dispatch('shown', {
       "rsc": rsc,
-      "hideCallback": ()=>{ flipped = false }
+      "hideCallback": ()=>{ flipped = false },
+      "cardFinishedCallback": ()=>{ finished = true },
+      "playIfPossibleCallback": playIfPossible ,
     });
   }
 
-  function flipCard() {
+  function cardClicked() {
+    if (finished) {
+      playIfPossible()
+      return; // card is done
+    }
+
     if (flipped) {
       return // flipped back only via callback from gameboard
     }
     flipped = true
     console.log(`Flipped card ${cardId}: ${flipped}`);
-
-    if (flipped) {
-      dispatchShown()
-
-      if (audio && !playedOnce) {
-        playedOnce = true
-        console.log("play sound")
-        audio.play();
-      }
-    }
+    dispatchShown()
   }
 
 </script>
 
-<div class="card" class:flipped={flipped} on:click={flipCard}>
+<div class="card" class:card-finished="{finished}" class:flipped={flipped} on:click={cardClicked}>
   <div class="card-face card-face-front {color}" >
   </div>
   <div class="card-face card-face-back">
@@ -62,6 +63,9 @@
     height: 100%;
     perspective: 1000px;
     cursor: pointer;
+  }
+  .card-finished:hover {
+    opacity: 0.8;
   }
 
   .card-face {
