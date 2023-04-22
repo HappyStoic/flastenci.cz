@@ -60,13 +60,23 @@
   }
 </script>
 
-<div class="container">
-  {#each cards as card (card)}
-      <Card on:shown={cardShown} color="{color(card)}" cardId="{card}" rsc="{popRandomRsc()}" />
-  {/each}
+<div class="outer-container">
+    <div class="container">
+      {#each cards as card (card)}
+          <Card on:shown={cardShown} color="{color(card)}" cardId="{card}" rsc="{popRandomRsc()}" />
+      {/each}
+    </div>
 </div>
 
 <style>
+  .outer-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 100vw;
+  }
+
   .container {
     height: 100vh;
     width: 100vh;
@@ -74,5 +84,12 @@
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(6, 1fr);
     gap: 5px;
+  }
+
+  @media (orientation: portrait) {
+      .container {
+          height: 100vw;
+          width: 100vw;
+      }
   }
 </style>
